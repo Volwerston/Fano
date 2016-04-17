@@ -70,11 +70,15 @@
     <ClInclude Include="Tree.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="BinaryDecrypt.txt" />
     <Text Include="BinaryEncrypt.txt" />
     <Text Include="Codes.txt" />
     <Text Include="Data.txt" />
     <Text Include="Decrypt.txt" />
     <Text Include="LetterEncrypt.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data.docx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -115,54 +115,41 @@ int toDecimal(const string& st)
 	return toReturn;
 }
 
+
 string toBinary(int dec)
 {
+	string base = string(8, ' ');
 
-		string toReturn = "";
+	int currentNum = dec;
 
-		if (dec == 0)
+	int power = 7;
+
+	while (currentNum > 0)
+	{
+		if (currentNum >= pow(2, power))
 		{
-			toReturn = "00000000";
-		}
-		else
-		{
-			int highPow = 8;
-
-			double rem = 0;
-
-			int highPowNum = pow(2, highPow);
-
-			string tech = string(highPow, ' ');
-
-			for (size_t i = 0; i < highPow; ++i)
-			{
-				tech[i] = '0';
-			}
-
-			while (dec > 0)
-			{
-				if (dec >= highPowNum)
-				{
-					tech[highPow] = '1';
-					dec -= highPowNum;
-				}
-
-				--highPow;
-				highPowNum = pow(2, highPow);
-			}
-
-			for (int i = tech.size() - 1; i >= 0; --i)
-			{
-				toReturn += tech[i];
-			}
+			base[base.size() - (power + 1)] = '1';
+			currentNum -= pow(2, power);
 		}
 
-		return toReturn;
+		--power;
+	}
+
+	for (size_t i = 0; i < base.size(); ++i)
+	{
+		if (base[i] == ' ')
+		{
+			base[i] = '0';
+		}
+	}
+
+	return base;
 }
 
 
 int main()
 {
+	
 	vector<long double> frequency(128);
 	vector<int> numOfSymbols(128);
 	vector<char> text;
@@ -173,6 +160,7 @@ int main()
 		cout << frequency[i] << endl;
 	}
 	*/
+	
 
 	ifstream in("Data.txt");
 	char ch;
@@ -206,6 +194,7 @@ int main()
 
 	cout << sumOfFrequencies << endl;
 	*/
+	
 
 	vector<long double> nonZeroFrequencies;
 	vector<char> nonZeroSymbols;
@@ -255,6 +244,84 @@ int main()
 	}
 
 	out.close();	
+
+	ifstream binaryInput("BinaryEncrypt.txt");
+
+
+	vector<char> decryptedText;
+
+	string buffer = "";
+	char read;
+
+	while (binaryInput.get(read))
+	{
+		buffer += read;
+
+		if (buffer.size() == 8)
+		{
+			char write = char(toDecimal(buffer));
+			decryptedText.push_back(write);
+			buffer = "";
+		}
+	}
+
+	if (buffer.size() != 0)
+	{
+		buffer += string(8 - buffer.size(), ' ');
+		char write = char(toDecimal(buffer));
+		decryptedText.push_back(write);
+		buffer = "";
+	}
+
+	binaryInput.close();
+
+
+	// Still OK
+
+
+
+	ofstream binaryOutput("BinaryDecrypt.txt");
+
+	for (size_t i = 0; i < decryptedText.size(); ++i)
+	{
+		if (int(decryptedText[i]) < 0)
+		{
+			binaryOutput << toBinary(decryptedText[i] + 256);
+		}
+		else
+		{
+			binaryOutput << toBinary(decryptedText[i]);
+		}
+	}
+
+
+	binaryOutput.close();
+
+	ifstream toDecrypt("BinaryDecrypt.txt");
+	ofstream decrypted("Decrypt.txt");
+
+	string buffer1 = "";
+
+	while (!toDecrypt.eof())
+	{
+		toDecrypt.get(read);
+		buffer1 += read;
+
+		for (size_t i = 0; i < codes.size(); ++i)
+		{
+			if (buffer1 == codes[i])
+			{
+				decrypted << nonZeroSymbols[i];
+				buffer1 = "";
+				break;
+			}
+		}
+	}
+
+	toDecrypt.close();
+	decrypted.close();
+
+	
 
 	system("pause");
 	return 0;

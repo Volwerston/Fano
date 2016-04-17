@@ -1,1 +1,21 @@
-﻿  Fano.vcxproj -> C:\Users\Юрiй\Local_repository\Fano\Debug\Fano.exe
+﻿  main.cpp
+c:\users\юрiй\local_repository\fano_2\fano\main.cpp(44): warning C4018: '<' : signed/unsigned mismatch
+c:\users\юрiй\local_repository\fano_2\fano\main.cpp(111): warning C4244: '+=' : conversion from 'double' to 'int', possible loss of data
+c:\users\юрiй\local_repository\fano_2\fano\main.cpp(132): warning C4244: '-=' : conversion from 'double' to 'int', possible loss of data
+c:\users\юрiй\local_repository\fano_2\fano\tree.h(135): warning C4018: '<' : signed/unsigned mismatch
+          c:\users\юрiй\local_repository\fano_2\fano\tree.h(130) : while compiling class template member function 'void Tree<T>::graphicFromNode(Node<T> *) const'
+          with
+          [
+              T=std::string
+          ]
+          c:\users\юрiй\local_repository\fano_2\fano\tree.h(382) : see reference to function template instantiation 'void Tree<T>::graphicFromNode(Node<T> *) const' being compiled
+          with
+          [
+              T=std::string
+          ]
+          c:\users\юрiй\local_repository\fano_2\fano\main.cpp(64) : see reference to class template instantiation 'Tree<T>' being compiled
+          with
+          [
+              T=std::string
+          ]
+  Fano.vcxproj -> C:\Users\Юрiй\Local_repository\Fano_2\Fano\Debug\Fano.exe

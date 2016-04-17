@@ -29,6 +29,10 @@
     <Text Include="BinaryEncrypt.txt" />
     <Text Include="LetterEncrypt.txt" />
     <Text Include="Decrypt.txt" />
+    <Text Include="BinaryDecrypt.txt" />
     <Text Include="Data.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data.docx" />
   </ItemGroup>
 </Project>
