@@ -64,9 +64,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Fano.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Fano.h" />
     <ClInclude Include="Tree.h" />
   </ItemGroup>
   <ItemGroup>
@@ -74,11 +76,10 @@
     <Text Include="BinaryEncrypt.txt" />
     <Text Include="Codes.txt" />
     <Text Include="Data.txt" />
+    <Text Include="Data1.txt" />
     <Text Include="Decrypt.txt" />
     <Text Include="LetterEncrypt.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Data.docx" />
+    <Text Include="Text.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 using namespace std;
 
 template<class T> class Tree;
@@ -40,7 +42,6 @@ struct Node
 		return right;
 	}
 
-
 	void setLeftSon(const T& data)
 	{
 		Node<T>* newOne = new Node<T>(data, this, this->getLevel() + 1);
@@ -52,7 +53,6 @@ struct Node
 		Node<T>* newOne = new Node<T>(data, this, this->getLevel() + 1);
 		this->right = newOne;
 	}
-
 };
 
 template <class T>
@@ -288,9 +288,6 @@ public:
 			if (el->left == nullptr && el->right == nullptr)
 			{
 				Node<T>* buffer = el->parent;
-
-
-				cout << buffer->data << endl;
 
 				if (buffer->left == el)
 				{

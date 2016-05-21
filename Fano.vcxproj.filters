@@ -18,21 +18,26 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Fano.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Tree.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Fano.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Codes.txt" />
     <Text Include="BinaryEncrypt.txt" />
     <Text Include="LetterEncrypt.txt" />
     <Text Include="Decrypt.txt" />
     <Text Include="BinaryDecrypt.txt" />
     <Text Include="Data.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Data.docx" />
+    <Text Include="Text.txt" />
+    <Text Include="Data1.txt" />
+    <Text Include="Codes.txt" />
   </ItemGroup>
 </Project>

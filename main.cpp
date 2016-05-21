@@ -1,327 +1,119 @@
 #include <iostream>
-#include <string>
-#include <vector>
 #include <fstream>
-#include <sstream>
-#include <cmath>
+#include <cctype>
 
 #include "Tree.h"
+#include "Fano.h"
 
 using namespace std;
 
-typedef vector<long double>::iterator Iterator;
-
-void sortFreq(vector<long double>& freq, vector<char>& sym)
+bool test1()
 {
-	for (size_t i = 0; i < freq.size(); ++i)
-	{
-		for (size_t j = 0; j < freq.size() - (i + 1); ++j)
-		{
-			if (freq[j] < freq[j + 1])
-			{
-				long double buf1 = freq[j];
-				freq[j] = freq[j + 1];
-				freq[j + 1] = buf1;
+	Tree<int> tr;
 
-				char buf2 = sym[j];
-				sym[j] = sym[j + 1];
-				sym[j + 1] = buf2;
+	bool passed = tr.isEmpty() ? true : false;
+
+	if (passed)
+	{
+		tr.add(10);
+		tr.add(5);
+		tr.add(12);
+		tr.add(2);
+		tr.add(7);
+		tr.add(6);
+		tr.add(11);
+
+		passed = (tr.getLeaves() == vector<int>{ 2, 6, 11 } ? true : false);
+
+		if (passed)
+		{
+
+			tr.deleteElem(6);
+
+			passed = (tr.getLeaves() == vector<int>{2, 7, 11} ? true : false);
+
+			if (passed)
+			{
+				tr.deleteElem(5);
+
+				passed = (tr.getLeaves() == vector<int>{7, 11} ? true : false);
 			}
 		}
 	}
+
+	return passed;
 }
 
-void decryptCode(int start, int finish, const vector<long double>& freq, Node<string>* & node , char symbol)
+bool test2()
 {
+	Fano data("Data.txt");
 
-	node->data += symbol;
+	data.encryptBinary("BinaryEncrypt.txt", "Codes.txt");
+	data.encryptInSymbols("LetterEncrypt.txt");
+	data.decrypt("BinaryDecrypt.txt", "Decrypt.txt");
 
-	if (finish - start > 0)
+	bool passed = true;
+
+	ifstream in1("Data.txt");
+	ifstream in2("Decrypt.txt");
+
+	char ch1;
+	char ch2;
+
+	while (in1 >> ch1)
 	{
-		long double min = 1;
-		int min_start;
+		in2 >> ch2;
 
-		for (size_t i = start; i < finish; ++i)
+		if (int(ch1) >= 0 && isgraph(ch1))
 		{
-			if (abs(freq[i] - freq[i + 1]) < min)
+			if (ch1 != ch2)
 			{
-				min = abs(freq[i] - freq[i + 1]);
-				min_start = i;
+				passed = false;
+				break;
 			}
 		}
-
-		node->setLeftSon(node->data);
-		node->setRightSon(node->data);
-
-		decryptCode(start, min_start, freq, node->getLeft(), '0');
-		decryptCode(min_start + 1, finish, freq, node->getRight(), '1');
-
 	}
+
+	return passed;
 }
 
-vector<string> getFanoCodes(const vector<long double>& freq)
+bool test3()
 {
-	Tree<string> tr;
+	_CrtMemState c1, c2, c3;
 
-	tr.add("");
+	_CrtMemCheckpoint(&c1);
 
-	decryptCode(0, freq.size() - 1, freq,  tr.getRoot(), ' ');
-
-	vector<string> toReturn = tr.getLeaves();
-
-	for (size_t i = 0; i < toReturn.size(); ++i)
 	{
-		toReturn[i].erase(0, 1);
+		Tree<int> test;
+		test.add(3);
+		test.add(2);
+		test.add(1);
 	}
 
-	/*
-	for (size_t i = 0; i < toReturn.size(); ++i)
-	{
-		Node<string>* node = tr.find(toReturn[i]);
+	_CrtMemCheckpoint(&c2);
 
-		if (node->left != nullptr || node->right != nullptr)
-		{
-			toReturn.erase(i, i);
-		}
-	}
-	*/
-
-	tr.print();
-
-	return toReturn;
-}
-
-template <typename T>
-string toString(const T& t)
-{
-	ostringstream oStream;
-	oStream << t;
-
-	return oStream.str();
-}
-
-int toDecimal(const string& st)
-{
-	int toReturn = 0;
-
-	for (int i = st.size() - 1; i >= 0; --i)
-	{
-		if (st[i] == '1')
-		{
-			toReturn += pow(2, st.size() - (i + 1));
-		}
-	}
-
-	return toReturn;
-}
-
-
-string toBinary(int dec)
-{
-	string base = string(8, ' ');
-
-	int currentNum = dec;
-
-	int power = 7;
-
-	while (currentNum > 0)
-	{
-		if (currentNum >= pow(2, power))
-		{
-			base[base.size() - (power + 1)] = '1';
-			currentNum -= pow(2, power);
-		}
-
-		--power;
-	}
-
-	for (size_t i = 0; i < base.size(); ++i)
-	{
-		if (base[i] == ' ')
-		{
-			base[i] = '0';
-		}
-	}
-
-	return base;
+	return !_CrtMemDifference(&c3, &c1, &c2);
 }
 
 
 int main()
 {
-	
-	vector<long double> frequency(128);
-	vector<int> numOfSymbols(128);
-	vector<char> text;
+	cout << "Waiting for tests' results...\n";
 
-	/*
-	for (size_t i = 0; i < 128; ++i)
+	if (!test1())
 	{
-		cout << frequency[i] << endl;
+		cout << "Test 1 failed" << endl;
 	}
-	*/
-	
-
-	ifstream in("Data.txt");
-	char ch;
-	int textSize = 0;
-
-	while (in.get(ch))
+   
+	if (!test2())
 	{
-		numOfSymbols[int(ch)]++;
-		text.push_back(ch);
-		++textSize;
-	}
-
-	in.clear();
-	in.seekg(0);
-	in.close();
-
-	for (size_t i = 0; i < 128; ++i)
-	{
-		frequency[i] = double(numOfSymbols[i]) / textSize;
-	}
-
-	/*
-	long double sumOfFrequencies = 0;
-
-	
-	for (size_t i = 0; i < 128; ++i)
-	{
-		cout << frequency[i] << endl;
-		sumOfFrequencies += frequency[i];
-	}
-
-	cout << sumOfFrequencies << endl;
-	*/
-	
-
-	vector<long double> nonZeroFrequencies;
-	vector<char> nonZeroSymbols;
-
-	long double sumOfFrequencies = 0;
-	 
-	// don't forget to decomment!!! - OK
-	
-	for (size_t i = 0; i < 128; ++i)
-	{
-		if (frequency[i] != 0)
-		{
-			nonZeroFrequencies.push_back(frequency[i]);
-			nonZeroSymbols.push_back(char(i));
-			sumOfFrequencies += frequency[i];
-		}
-	}
-
-	sortFreq(nonZeroFrequencies, nonZeroSymbols);
-
-	
-	for (size_t i = 0; i < nonZeroFrequencies.size(); ++i)
-	{
-		cout << nonZeroSymbols[i] << " -- " << nonZeroFrequencies[i] << endl;
+		cout << "Test 2 failed" << endl;
 	}
 	
-
-	// THAT'S WHERE FUN BEGINS :))
-
-	vector<string> codes = getFanoCodes(nonZeroFrequencies);
-
-	ofstream out("BinaryEncrypt.txt");
-
-	for (size_t i = 0; i < text.size(); ++i)
+	if (!test3())
 	{
-		int position = 0;
-		for (size_t j = 0; j < nonZeroSymbols.size(); ++j)
-		{
-			if (text[i] == nonZeroSymbols[j])
-			{
-				position = j;
-				break;
-			}
-		}
-
-		out << codes[position];
+		cout << "Test 3 failed" << endl;
 	}
-
-	out.close();	
-
-	ifstream binaryInput("BinaryEncrypt.txt");
-
-
-	vector<char> decryptedText;
-
-	string buffer = "";
-	char read;
-
-	while (binaryInput.get(read))
-	{
-		buffer += read;
-
-		if (buffer.size() == 8)
-		{
-			char write = char(toDecimal(buffer));
-			decryptedText.push_back(write);
-			buffer = "";
-		}
-	}
-
-	if (buffer.size() != 0)
-	{
-		buffer += string(8 - buffer.size(), ' ');
-		char write = char(toDecimal(buffer));
-		decryptedText.push_back(write);
-		buffer = "";
-	}
-
-	binaryInput.close();
-
-
-	// Still OK
-
-
-
-	ofstream binaryOutput("BinaryDecrypt.txt");
-
-	for (size_t i = 0; i < decryptedText.size(); ++i)
-	{
-		if (int(decryptedText[i]) < 0)
-		{
-			binaryOutput << toBinary(decryptedText[i] + 256);
-		}
-		else
-		{
-			binaryOutput << toBinary(decryptedText[i]);
-		}
-	}
-
-
-	binaryOutput.close();
-
-	ifstream toDecrypt("BinaryDecrypt.txt");
-	ofstream decrypted("Decrypt.txt");
-
-	string buffer1 = "";
-
-	while (!toDecrypt.eof())
-	{
-		toDecrypt.get(read);
-		buffer1 += read;
-
-		for (size_t i = 0; i < codes.size(); ++i)
-		{
-			if (buffer1 == codes[i])
-			{
-				decrypted << nonZeroSymbols[i];
-				buffer1 = "";
-				break;
-			}
-		}
-	}
-
-	toDecrypt.close();
-	decrypted.close();
-
-	
 
 	system("pause");
 	return 0;
